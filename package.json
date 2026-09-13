@@ -1,0 +1,40 @@
+{
+  "name": "lexscope",
+  "version": "1.0.0",
+  "description": "LexScope — single-gateway short-lived scoped task credentials for agent tool calls (protocol lexscope/1)",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
+  "bin": {
+    "lexscope": "./bin/lexscope.mjs",
+    "lexscope-broker": "./bin/lexscope-broker.mjs"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./sdk": "./src/sdk.ts",
+    "./mcp": "./src/mcp.ts",
+    "./openai": "./src/openai.ts",
+    "./server": "./src/server.ts",
+    "./hosted": "./src/hosted.ts"
+  },
+  "scripts": {
+    "test": "node --test \"tests/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "vectors": "node --test tests/vectors.test.ts",
+    "smoke": "node examples/smoke.mjs",
+    "smoke:inproc": "node tests/smoke.ts",
+    "test:py": "cd python && python3 -m pytest tests -q"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.4",
+    "typescript": "^5.9.3"
+  },
+  "files": [
+    "src",
+    "bin",
+    "conformance",
+    "python"
+  ]
+}
