@@ -88,6 +88,16 @@ npm run smoke       # live broker + CLI happy path on an ephemeral port
 npm run test:py     # Python parity suite (18 cases incl. the 10k corpus)
 ```
 
+Python package (requires Python >= 3.11; `pyproject.toml` is at the repo
+**root**, so the editable path is `.` — `-e python` fails):
+
+```bash
+uv venv --python 3.12 .venv        # uv fetches 3.12 if absent
+uv pip install -e .                # uv venvs ship no pip — use `uv pip`, not `.venv/bin/pip`
+.venv/bin/python -m lexscope --help
+.venv/bin/lexscope-py --help       # same CLI as `python -m lexscope`
+```
+
 The smoke boots `lexscope-broker` on `127.0.0.1:0`, generates real keys, mints
 a token through the real CLI (token bytes travel over an inherited FD only),
 performs a call, reads back the replayed result, exports and verifies the
