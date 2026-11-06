@@ -80,6 +80,9 @@ examples/      live smoke driver (real broker + real CLI)
 
 ## Quick start
 
+Use Node.js 24 (the CI version; Node 24 or newer is required) and Python 3.12.
+With nvm, run `nvm use` to select the version in `.nvmrc` before installing.
+
 ```bash
 npm ci
 npm run typecheck   # tsc --noEmit
