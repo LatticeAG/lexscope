@@ -100,6 +100,16 @@ a token through the real CLI (token bytes travel over an inherited FD only),
 performs a call, reads back the replayed result, exports and verifies the
 audit chain — then verifies the same evidence with `python -m lexscope`.
 
+## Broker persistence and Node upgrades
+
+The broker persists tenant state in SQLite through Node's built-in
+`node:sqlite` (`DatabaseSync`), so its API and stability depend on the Node
+release. Node 22 emits an experimental warning; Node 24.22.2 loads it without
+that warning. The absence of a warning alone does not guarantee API stability.
+Before upgrading Node, check that release's SQLite documentation and run the
+conformance suite and live smoke against the new runtime. Back up broker
+databases before upgrading and verify that existing data can be reopened.
+
 ## CLI
 
 ```
