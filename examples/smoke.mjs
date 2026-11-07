@@ -18,6 +18,14 @@ import { jcsString } from "../src/core/jcs.ts";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const DIR = mkdtempSync(join(tmpdir(), "lexscope-smoke-"));
+let broker;
+process.on("exit", () => {
+  broker?.kill("SIGTERM");
+  if (process.env.LX_SMOKE_KEEP !== "1") rmSync(DIR, { recursive: true, force: true });
+});
+for (const [signal, code] of [["SIGINT", 130], ["SIGTERM", 143]]) {
+  process.on(signal, () => process.exit(code));
+}
 const ORIGIN = "https://gateway.example.test";
 const rid = (p, n = 21) => `${p}_${randomBytes(16).toString("base64url").padEnd(n, "x").slice(0, n)}`;
 const writ = (name, data, mode = 0o644) => { const p = join(DIR, name); writeFileSync(p, data); chmodSync(p, mode); return p; };
@@ -84,7 +92,7 @@ const callReq = writ("call.json", jcsString({
 const resultReq = writ("result.json", jcsString({ v: 1, task_id: TASK, call_id: CALL }));
 
 // ---- broker ----
-const broker = spawn(process.execPath, [join(ROOT, "bin/lexscope-broker.mjs"),
+broker = spawn(process.execPath, [join(ROOT, "bin/lexscope-broker.mjs"),
   "--config", gwPath, "--secrets", secPath, "--data-key", dkPath,
   "--docs", docsPath, "--records", recsPath,
   "--db", join(DIR, "broker.db"), "--listen", "127.0.0.1:0"],
@@ -165,5 +173,4 @@ expect(cli(["audit", "verify", "--in", auditOut, "--trust", trustPath]), 0, "aud
 broker.kill("SIGTERM");
 const secs = ((Date.now() - t0) / 1000).toFixed(1);
 console.log(`\nsmoke ${failures === 0 ? "PASS" : "FAIL"} (${secs}s, dir ${DIR})`);
-if (process.env.LX_SMOKE_KEEP !== "1") rmSync(DIR, { recursive: true, force: true });
 process.exit(failures === 0 ? 0 : 1);
