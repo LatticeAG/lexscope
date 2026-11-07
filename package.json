@@ -24,7 +24,7 @@
     "typecheck": "tsc --noEmit",
     "vectors": "node --test tests/vectors.test.ts",
     "smoke": "node examples/smoke.mjs",
-    "smoke:inproc": "node --disable-warning=ExperimentalWarning tests/smoke.ts",
+    "smoke:inproc": "node tests/smoke-entry.mjs",
     "test:py": "cd python && python3 -m pytest tests -q"
   },
   "devDependencies": {
