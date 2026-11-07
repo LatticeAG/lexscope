@@ -80,12 +80,10 @@ examples/      live smoke driver (real broker + real CLI)
 
 ## Quick start
 
-Use Node.js 24 (the CI version; Node 24 or newer is required) and Python 3.12.
+Use Node.js 22.18 or newer and Python 3.12. CI tests Node 22 and 24.
 With nvm, run `nvm use` to select the version in `.nvmrc` before installing.
-Node 22 is unsupported and can emit an `ExperimentalWarning` on stderr when
-the broker or in-process harness loads `node:sqlite`; treat that warning as a
-runtime diagnostic, not a protocol error. Use the supported Node version for
-processes that require clean stderr.
+Node 22 can emit an `ExperimentalWarning` on stderr when the broker or
+in-process harness loads `node:sqlite`.
 
 ```bash
 npm ci
