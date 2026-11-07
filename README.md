@@ -82,8 +82,9 @@ examples/      live smoke driver (real broker + real CLI)
 
 Use Node.js 22.18 or newer and Python 3.12. CI tests Node 22 and 24.
 With nvm, run `nvm use` to select the version in `.nvmrc` before installing.
-Node 22 can emit an `ExperimentalWarning` on stderr when the broker or
-in-process harness loads `node:sqlite`.
+Node 22 can emit an `ExperimentalWarning` on stderr when the broker loads
+`node:sqlite`. The in-process smoke command suppresses experimental warnings
+for that process; other warnings remain enabled.
 
 ```bash
 npm ci
