@@ -80,6 +80,12 @@ examples/      live smoke driver (real broker + real CLI)
 
 ## Quick start
 
+Use Node.js 22.18 or newer and Python 3.12. CI tests Node 22 and 24.
+With nvm, run `nvm use` to select the version in `.nvmrc` before installing.
+Node 22 can emit an `ExperimentalWarning` on stderr when the broker loads
+`node:sqlite`. The in-process smoke entry point suppresses only that SQLite warning on Node 22;
+other warnings remain enabled.
+
 ```bash
 npm ci
 npm run typecheck   # tsc --noEmit
@@ -92,6 +98,16 @@ The smoke boots `lexscope-broker` on `127.0.0.1:0`, generates real keys, mints
 a token through the real CLI (token bytes travel over an inherited FD only),
 performs a call, reads back the replayed result, exports and verifies the
 audit chain — then verifies the same evidence with `python -m lexscope`.
+
+## Broker persistence and Node upgrades
+
+The broker persists tenant state in SQLite through Node's built-in
+`node:sqlite` (`DatabaseSync`), so its API and stability depend on the Node
+release. Node 22 emits an experimental warning; Node 24.22.2 loads it without
+that warning. The absence of a warning alone does not guarantee API stability.
+Before upgrading Node, check that release's SQLite documentation and run the
+conformance suite and live smoke against the new runtime. Back up broker
+databases before upgrading and verify that existing data can be reopened.
 
 ## CLI
 
